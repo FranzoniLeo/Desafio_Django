@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Painel do cliente </title>
+</head>
+<body>
+    <br>
+    <th> Painel do cliente </th>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            $('#id_hotel').change(function () {
+                var hotelId = $(this).val();
+                $.ajax({
+                    url: '/ajax/carregar-quartos/',
+                    data: {
+                        'hotel': hotelId
+                    },
+                    success: function (data) {
+                        var select = $('#id_quarto');
+                        select.empty();
+                        for (var i = 0; i < data.length; i++) {
+                            var option = $("<option></option>")
+                                .attr("value", data[i].id)
+                                .text("Quarto " + data[i].numero);
+                            select.append(option);
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+<hr>
+
+
+
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Reservar</button>
+</form>
+
+{% if messages %}
+<ul>
+  {% for message in messages %}
+    <li>{{ message }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+<br>
+
+<form method="post" action="{% url 'logout' %}">
+  {% csrf_token %}
+  <button type="submit">  logout  </button>
+</form>
+
+
+
+<h3>Minhas reservas ativas:</h3>
+<ul>
+  {% for reserva in reservas %}
+    <li>
+      Hotel: {{ reserva.hotel.nome }} | Quarto: {{ reserva.quarto.numero }}
+      | Check-in: {{ reserva.data_checkin }} | Check-out: {{ reserva.data_checkout }}
+      <form action="{% url 'cancelar_reserva' reserva.id %}" method="post" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" onclick="return confirm('Tem certeza que deseja cancelar esta reserva?')">Cancelar</button>
+      </form>
+    </li>
+  {% empty %}
+    <li>Você não possui reservas ativas.</li>
+  {% endfor %}
+</ul>
+
+
+</body>
+</html>

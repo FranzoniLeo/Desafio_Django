@@ -1,0 +1,7 @@
+<h2>Tem certeza que deseja excluir o hotel "{{ hotel.nome }}"?</h2>
+<form method="post">
+  {% csrf_token %}
+  <button type="submit">Sim, excluir</button>
+  <a href="{% url 'painel_admin' %}">Cancelar</a>
+</form>
+

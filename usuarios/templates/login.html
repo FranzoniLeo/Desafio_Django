@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title> login </title>
+    </head>
+    <body>
+
+        <h1>Efetuar Login</h1>
+
+        <form action="{% url 'login' %}" method="POST">{% csrf_token %}
+
+            <input type="text" placeholder="Usuario " name= 'username'>
+            <br>
+            <br>
+            <input type="password" placeholder="Senha " name= 'senha'>
+            <br>
+            <br>
+            <input type="submit" value = 'login'>
+            <br>
+
+        </form>
+
+        {% if erro %}
+            <p style="color: red;">{{ erro }}</p>
+        {% endif %}
+        
+        <p>precisa criar uma conta?</p>
+        <a href="{% url 'cadastro' %}">
+            <button type="button">Ir para o cadastro</button>
+        </a>
+
+    </body>
+</html>

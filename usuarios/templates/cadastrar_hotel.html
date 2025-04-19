@@ -1,0 +1,18 @@
+<h2>Cadastrar Novo Hotel</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Cadastrar</button>
+</form>
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+         </ul>
+    {% endif %}
+
+<a href="{% url 'painel_admin' %}">Voltar ao Painel</a>
+

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title> cadastro </title>
+    </head>
+    <body>
+
+        <h1>Cadastrar novo Usuario</h1>
+
+        <form action="{% url 'cadastro' %}" method="POST">{% csrf_token %}
+
+            <input type="email" placeholder="Email " name= 'email'>
+            <br>
+            <br>
+            <input type="text" placeholder="Usuario " name= 'username'>
+            <br>
+            <br>
+            <input type="password" placeholder="Senha " name= 'senha'>
+            <br>
+            <br>
+            <input type="submit" value = 'cadastrar'>
+            <br>
+
+        </form> 
+
+        {% if erro %}
+            <p style="color: red;">{{ erro }}</p>
+        {% endif %}
+        
+        <p>Já tem uma conta?</p>
+        <a href="{% url 'login' %}">
+            <button type="button">Ir para o Login</button>
+        </a>
+
+    </body>
+</html>

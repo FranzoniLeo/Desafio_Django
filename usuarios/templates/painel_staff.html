@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Painel do Staff </title>
+</head>
+<body>
+    <th> Painel do Staff </th>
+    <br>
+    <br>
+
+<label for="hotel">Hotel:</label>
+<select id="id_hotel">
+        <option value="">Selecione um hotel</option>
+    {% for hotel in hoteis %}
+        <option value="{{ hotel.id }}">{{ hotel.nome }}</option>
+    {% endfor %}
+</select>
+
+<br>
+<br>
+<label for="data">Check-in:</label>
+<input type="date" id="data-checkin">
+
+<label for="data">Check-out:</label>
+<input type="date" id="data-checkout">
+<br>
+<br>
+<button id="verificar">Verificar Quartos</button>
+
+<div id="resultado-quartos">
+  <!-- Quartos serão listados aqui -->
+</div>
+
+<script>
+  document.getElementById('verificar').addEventListener('click', function() {
+    const hotelId = document.getElementById('id_hotel').value;
+    const checkin = document.getElementById('data-checkin').value;
+    const checkout = document.getElementById('data-checkout').value;
+  
+      if (!hotelId || !checkin || !checkout) {
+        alert("Selecione um hotel e as duas datas!");
+        return;
+      }
+  
+      fetch(`/hotel/verificar-quartos/?hotel_id=${hotelId}&checkin=${checkin}&checkout=${checkout}`)
+          .then(response => response.json())
+          .then(data => {
+              const resultado = document.getElementById('resultado-quartos');
+              resultado.innerHTML = '';
+  
+              if (data.quartos.length === 0) {
+                  resultado.innerHTML = 'Nenhum quarto encontrado.';
+            } else {
+                data.quartos.forEach(quarto => {
+                    const status = quarto.ocupado ? 'Ocupado' : 'Livre';
+                    resultado.innerHTML += `<p>Quarto ${quarto.numero}: ${status}</p>`;
+                });
+            }
+        })
+        .catch(error => {
+            resultado.innerHTML = `<p style="color:red;">${error.message}</p>`;
+        });
+});
+  </script>
+<br>
+<br>
+    <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit">  logout  </button>
+    </form>
+
+</body>
+</html>

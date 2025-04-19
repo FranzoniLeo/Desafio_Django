@@ -1,0 +1,25 @@
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.log
+
+# Pastas do projeto que não são necessárias
+.env
+.env.*
+venv/
+build/
+dist/
+*.egg-info/
+.mypy_cache/
+.coverage
+celerybeat-schedule
+
+# IDEs e editores
+.vscode/
+.idea/
+
+# Arquivos de controle
+*.db
+*.DS_Store
+*.bak
+*.swp

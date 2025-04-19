@@ -1,0 +1,83 @@
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel do Administrador</title>
+</head>
+<body>
+    <h1>Painel do Administrador</h1>
+
+    <table border = "1">
+        <thead>
+            <tr>
+                <th>Usuário</th>
+                <th>Tipo Atual</th>
+                <th>Alterar Tipo</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in usuarios %}
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.perfil.tipo }}</td>
+                    <td>
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="user_id" value="{{ user.id }}">
+                            <select name="tipo">
+                                <option value="cliente" {% if user.perfil.tipo == 'cliente' %}selected{% endif %}>Cliente</option>
+                                <option value="staff" {% if user.perfil.tipo == 'staff' %}selected{% endif %}>Funcionário</option>
+                                <option value="admin" {% if user.perfil.tipo == 'admin' %}selected{% endif %}>Administrador</option>
+                            </select>
+                            <button type="submit">Atualizar</button>
+                        </form> {% csrf_token %}
+                    </td>
+                    <td>
+                      <form method="post" action="{% url 'excluir_usuario' user.id %}">
+                        {% csrf_token %}
+                        <button type="submit" onclick="return confirm('Tem certeza que deseja excluir {{ user.username }}?')">Excluir</button>
+                      </form> {% csrf_token %} 
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <hr>
+
+    <h2>Hotéis</h2>
+    <table border="1">
+        <tr>
+            <th>Nome</th>
+            <th>Quartos</th>
+            <th>Ações</th>
+        </tr>
+        {% for hotel in hoteis %}
+        <tr>
+            <td>{{ hotel.nome }}</td>
+            <td>{{ hotel.quarto_set.count }}</td>
+            <td>
+                <a href="{% url 'editar_hotel' hotel.id %}">Editar</a> |
+                <a href="{% url 'excluir_hotel' hotel.id %}">Excluir</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+         </ul>
+    {% endif %}
+    <br>
+    <br>
+    <a href="{% url 'cadastrar_hotel' %}"> + Cadastrar novo hotel</a>
+    <br>
+    <br>
+    <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit">  logout  </button>
+    </form>
+</body>
+</html>
